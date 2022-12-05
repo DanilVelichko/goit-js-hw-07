@@ -1,7 +1,7 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-//* Gallery rendering creation 
+//*  -------------- Gallery rendering creation ----------------- // 
 const galleryContainer = document.querySelector('.gallery');
 
 function createPhotoRender(gallery) {
@@ -18,8 +18,7 @@ function createPhotoRender(gallery) {
     />
   </a>
 </div>
-        
-        `; 
+      `; 
     }).join(''); 
 };
 
@@ -32,13 +31,8 @@ galleryContainer.insertAdjacentHTML('beforeend', cardsMarkup);
 galleryContainer.addEventListener('click', onGalleryContainerClick); // put CLick listener
 
 function onGalleryContainerClick(e) {
-    e.preventDefault(); // Prevent link loading
-
-    // prevent click on no-image
-    const isImageGalleryEl = e.target.classList.contains('gallery__image');
-    if (!isImageGalleryEl || e.target.nodeName !=="IMG")  { 
-        return;
-    } 
+      noStandartActions(e); // Prevent link loading 
+      noClickMiss(e);  // prevent click on no-image
     
     // connect Lightbox library
     const instance = basicLightbox.create(`
@@ -48,11 +42,19 @@ function onGalleryContainerClick(e) {
 
     // close IMG
     galleryContainer.addEventListener("keydown", (e) => {
-        if (e.code === "Escape") {
-            instance.close();
-        };
+        if (e.code === "Escape") instance.close();
     });
-    console.dir(e.target.dataset.source);
+    
+    // console.dir(e.target.dataset.source);
+};
+
+//* divided functions:
+function noStandartActions (e) {
+    e.preventDefault();
+};
+function noClickMiss (e) {
+  const isImageGalleryEl = e.target.classList.contains('gallery__image');
+    if (!isImageGalleryEl || e.target.nodeName !=="IMG") return;
 };
 
 console.log(createPhotoRender(galleryItems));
