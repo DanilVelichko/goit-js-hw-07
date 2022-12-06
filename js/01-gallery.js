@@ -1,12 +1,11 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-//*  -------------- Gallery rendering creation ----------------- // 
+//* Gallery rendering creation 
 const galleryContainer = document.querySelector('.gallery');
 
-function createPhotoRender(gallery) {
-    
-    return gallery.map(({preview, original, description}) => {
+const createPhotoRender = (gallery) => {
+      return gallery.map(({preview, original, description}) => {
         return `
         <div class="gallery__item">
         <a class="gallery__link" href="large-image.jpg">
@@ -18,12 +17,11 @@ function createPhotoRender(gallery) {
     />
   </a>
 </div>
-      `; 
+        `; 
     }).join(''); 
 };
 
 const cardsMarkup = createPhotoRender(galleryItems);
-
 galleryContainer.insertAdjacentHTML('beforeend', cardsMarkup);
 
 
@@ -31,31 +29,25 @@ galleryContainer.insertAdjacentHTML('beforeend', cardsMarkup);
 galleryContainer.addEventListener('click', onGalleryContainerClick); // put CLick listener
 
 function onGalleryContainerClick(e) {
-      noStandartActions(e); // Prevent link loading 
-      noClickMiss(e);  // prevent click on no-image
-    
+    noStandartActions(e); // Prevent link loading
+
+    // prevent click on no-image element
+    const isImageGallery = e.target.nodeName; 
+    const hasClassGallery = e.target.classList.contains('gallery__image');
+    if (!hasClassGallery || isImageGallery !=="IMG") return;
+      
     // connect Lightbox library
     const instance = basicLightbox.create(`
     <img src="${e.target.dataset.source}" width="1280" >
-`);
-    instance.show();
+`); instance.show();
 
     // close IMG
     galleryContainer.addEventListener("keydown", (e) => {
         if (e.code === "Escape") instance.close();
     });
-    
-    // console.dir(e.target.dataset.source);
 };
 
 //* divided functions:
-function noStandartActions (e) {
-    e.preventDefault();
-};
-function noClickMiss (e) {
-  const isImageGalleryEl = e.target.classList.contains('gallery__image');
-    if (!isImageGalleryEl || e.target.nodeName !=="IMG") return;
-};
+const noStandartActions = (e) => e.preventDefault();
 
 console.log(createPhotoRender(galleryItems));
-
